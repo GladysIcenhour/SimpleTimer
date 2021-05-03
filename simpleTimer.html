@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Simple Timer</title>
+
+    <!--Font family for title/heading-->
+    <link 
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" 
+      rel="stylesheet"
+    /> 
+
+    <!--Font family for time-->
+    <link 
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap" 
+      rel="stylesheet"
+    /> 
+
+    <!--CSS code for timer-->
+    <style>
+      body {
+        background-color: #e43c98; 
+        color: #ffffff;
+      }
+
+      h1 {
+        font-size: 68px;
+        font-family: 'Dancing Script', cursive;
+        font-weight: 700;
+        text-align: center;
+        line-height: 59px;
+        margin: 0;
+      }
+
+      .timer {
+        display: grid;
+        justify-items: center;
+        grid-row-gap: 23px;
+        width: 100%;
+        padding-top: 25px;
+      }
+
+      .timerRing {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fddc7a;
+        height: 270px;
+        width: 270px;
+        border: 5px solid;
+        border-radius: 50%;
+      }
+
+      .time {
+        font-family: "Roboto Condensed", monospace;
+        font-weight: 300;
+        font-size: 60px;
+        color: #fddc7a;
+      }
+
+      .gold {
+        font-weight: 900;
+        color: #fddc7a;
+        text-shadow: 0 0 0px #fff, 0 0 50px #f2c94c;
+      }
+
+      .buttonLocation {
+        display: flex;
+        justify-content: space-between;
+        width: 187px;
+      }
+
+      button {
+        cursor: pointer;
+        margin: 0;
+        outline: none;
+        border: none;
+        background-color: #e43c98;
+        font-weight: 500;
+        font-family: 'Dancing Script', cursive;
+        color: #fddc7a;
+        text-shadow: 0 0 0px #fff, 0 0 50px #f2c94c;
+        text-align: center;
+        font-size: 28px;
+      }
+
+      #playButton {
+        display: block;
+      }
+
+      #pauseButton {
+        display: none;
+      }
+
+      #resetButton {
+          display: block;
+
+      }
+    
+    </style>
+    <!--End of CSS code for timer-->
+
+  </head>
+
+  <body>
+
+    <!--Div Container for timer ring and page heading-->
+    <div class="timer">
+      <h1><span class="gold">Simple Timer</span></h1>
+      <div class="timerRing">
+        <span class="time" id="display">00:00:00</span>
+      </div>
+
+      <!--Div Container for buttons-->
+      <div class="buttonLocation">
+        <button class="buttonClassPlayAndPause">
+          <button id="playButton">Play</button>
+
+          <button id="pauseButton">Pause</button>
+        </button>
+
+        <button class="buttonClassReset">
+          <button id="resetButton">Reset</button>
+        </button>
+      </div>
+    </div>
+
+
+  <!--JavaScript code for timer-->
+  <script>
+
+  // Here we will construct a function to convert the time to the desired format:
+
+  function timerToString(time) {
+  let differenceInHours = time / 3600000;
+  let hour = Math.floor(differenceInHours);
+
+  let differenceInMinutes = (differenceInHours - hour) * 60;
+  let minute = Math.floor(differenceInMinutes);
+
+  let differenceInSeconds = (differenceInMinutes - minute) * 60;
+  let second = Math.floor(differenceInSeconds);
+
+  let differenceInMilliseconds = (differenceInSeconds - second) * 100;
+  let millisecond = Math.floor(differenceInMilliseconds);
+
+  // Here we will format and pad the timer:
+  let MINUTE = minute.toString().padStart(2, "0");
+  let SECOND = second.toString().padStart(2, "0");
+  let MILLISECOND = millisecond.toString().padStart(2, "0");
+
+  return `${MINUTE}:${SECOND}:${MILLISECOND}`;
+  }
+
+  // Here we will construct a function that will modify the innerHTML:
+
+  function print(txt) {
+  document.getElementById("display").innerHTML = txt;
+  }
+
+
+
+  // Here we wil construct a function to display the buttons:
+
+  function buttonDisplay(buttonKey) {
+  const displayedButton = buttonKey === "PLAY" ? playButton : pauseButton;
+  const hiddenButton = buttonKey === "PLAY" ? pauseButton : playButton;
+  displayedButton.style.display = "block";
+  hiddenButton.style.display = "none";
+  }
+
+  // Here we will declare the variables for the following functions:
+
+  let startTime;
+  let timeElapsed = 0;
+  let timeInterval;
+
+
+  // Here we will construct the button functions:
+
+  function startButtonFunction() {
+  startTime = Date.now() - timeElapsed;
+  timeInterval = setInterval(function printTime() {
+  timeElapsed = Date.now() - startTime;
+  print(timerToString(timeElapsed));
+  }, 10);
+  buttonDisplay("PAUSE");
+  }
+
+  function pauseButtonFuntion() {
+  clearInterval(timeInterval);
+  buttonDisplay("PLAY");
+  }
+
+  function resetButtonFunction() {
+  clearInterval(timeInterval);
+  print("00:00:00");
+  timeElapsed = 0;
+  buttonDisplay("PLAY");
+  }
+
+
+  // Here we will construct event listeners:
+
+  let playButton = document.getElementById("playButton");
+  let pauseButton = document.getElementById("pauseButton");
+  let resetButton = document.getElementById("resetButton");
+
+  playButton.addEventListener("click", startButtonFunction);
+  pauseButton.addEventListener("click", pauseButtonFuntion);
+  resetButton.addEventListener("click", resetButtonFunction);
+
+  </script>
+
+  <!-- End ofJavaScript code for timer-->
+
+  </body>
+  
+</html>
